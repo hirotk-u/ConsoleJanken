@@ -45,8 +45,6 @@ namespace ConsoleJanken
         private List<JankenTe> CpuTeList;
         private List<JankenInfo> JankenInfoList;
 
-        private const int WIN_CNT = 3;
-
         /// <summary>
         ///コンストラクタ
         /// </summary>
@@ -58,13 +56,17 @@ namespace ConsoleJanken
         /// <summary>
         ///Janken
         /// </summary>
-        public void Janken()
+        public void Janken(int winCnt)
         {
             int jankenCnt = 1;
             int winCntPlayer = 0;
             int winCntCpu = 0;
 
-            Console.WriteLine(CreateFixedMsg());
+            Console.Clear();
+
+            string headerMsg = CreateFixedMsg(winCnt);
+
+            Console.WriteLine(headerMsg);
 
             while (true)
             {
@@ -78,23 +80,18 @@ namespace ConsoleJanken
                     case ConsoleKey.D3:
 
                         //判定結果
-                        JankenInfo resultInfo = JankenDetail(keyInfo.Key, ref winCntPlayer, ref winCntCpu);
+                        JankenInfo resultInfo = JankenDetail(keyInfo.Key);
 
                         //勝利数カウント
                         winCntPlayer += resultInfo.WinCntPlayer;
                         winCntCpu += resultInfo.WinCntCpu;
 
-                        Console.WriteLine(CreateDispMsg(jankenCnt, resultInfo.Judge, winCntPlayer, winCntCpu));
+                        string dispMsg = CreateDispMsg(jankenCnt, resultInfo.Judge, winCntPlayer, winCntCpu);
+
+                        //Console.WriteLine(CreateFixedMsg());
+                        Console.WriteLine(dispMsg);
 
                         jankenCnt++;
-
-                        break;
-
-                    case ConsoleKey.D9:
-                        Console.Clear();
-                        Console.WriteLine("ゲーム終了!");
-                        Console.ReadKey();
-                        Environment.Exit(0);
                         break;
 
                     default:
@@ -102,9 +99,9 @@ namespace ConsoleJanken
                 }
 
                 //終了判定
-                if (winCntPlayer >= WIN_CNT || winCntCpu >= WIN_CNT)
+                if (winCntPlayer >= winCnt || winCntCpu >= winCnt)
                 {
-                    string winUser = (winCntPlayer >= WIN_CNT ? "Player win!": "CPU win!");
+                    string winUser = (winCntPlayer >= winCnt ? "Player win!": "CPU win!");
                     Console.WriteLine(winUser);
                     Console.WriteLine("ゲーム終了!");
                     Console.ReadKey();
@@ -143,9 +140,7 @@ namespace ConsoleJanken
         /// <summary>
         ///JankenDetail
         /// </summary>
-        private JankenInfo JankenDetail(ConsoleKey key,
-                                        ref int winCntPlayer,
-                                        ref int winCntCpu)
+        private JankenInfo JankenDetail(ConsoleKey key)
         {
             //CPUの手
             Random r = new Random();
@@ -164,15 +159,13 @@ namespace ConsoleJanken
         /// <summary>
         ///画面固定メッセージ作成
         /// </summary>
-        private string CreateFixedMsg()
+        private string CreateFixedMsg(int winCnt)
         {
-            Console.Clear();
-
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("****************************");
-            sb.AppendLine("コンピュータとじゃんけん勝負");
-            sb.AppendLine("先に3本取ったほうが勝ち");
-            sb.AppendLine("****************************");
+            sb.AppendLine("******************************");
+            sb.AppendLine(" コンピュータとじゃんけん勝負");
+            sb.AppendLine($" 先に{winCnt}本取ったほうが勝ち");
+            sb.AppendLine("******************************");
             sb.AppendLine("次の番号を入力してください");
             sb.AppendLine("1:グー");
             sb.AppendLine("2:チョキ");

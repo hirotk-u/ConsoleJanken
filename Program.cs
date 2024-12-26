@@ -13,12 +13,10 @@ namespace ConsoleJanken
         /// </summary>
         static void Main(string[] args)
         {
-            Console.WriteLine("***********************");
-            Console.WriteLine("*   じゃんけんゲーム  *");
-            Console.WriteLine("***********************");
-            Console.WriteLine("次の番号を入力してください");
-            Console.WriteLine("1:ゲーム開始");
-            Console.WriteLine("9:ゲーム終了");
+            Console.WriteLine("********************");
+            Console.WriteLine("* じゃんけんゲーム *");
+            Console.WriteLine("********************");
+            Console.WriteLine("何本勝負にしますか？ [1～5]");
 
             while(true)
             {
@@ -27,14 +25,14 @@ namespace ConsoleJanken
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.D1:
-                        JankenProc jProc = new JankenProc();
-                        jProc.Janken();
-                        break;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.D3:
+                    case ConsoleKey.D4:
+                    case ConsoleKey.D5:
 
-                    case ConsoleKey.D9:
-                        Console.Clear();
-                        Console.WriteLine("ゲーム終了!");
-                        Environment.Exit(0);
+                        int winCnt = (int)char.GetNumericValue(keyInfo.KeyChar);
+                        JankenProc jProc = new JankenProc();
+                        jProc.Janken(winCnt);
                         break;
 
                     default:
